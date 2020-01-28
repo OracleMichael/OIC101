@@ -147,6 +147,7 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 	<img src="images/OIC-3.08.png" width="100%" title="The click and drag method, also revisited and also equally more fun than the immediately above">
 
 	2. A dialog box will appear. Enter the following information:
+	
 	| Field name                | Value                              |
 	|---------------------------|------------------------------------|
 	| Endpoint name             | sendToApp                          |
