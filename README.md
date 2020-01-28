@@ -5,7 +5,7 @@ This document shows how to use Oracle Integration Cloud (OIC) at the very basic 
 
 ## Purpose
 
-Before you get started, please note that this tutorial is **meant for beginners**. Every step builds on all previous steps, so if you understand a step feel free to skip that step - please still read all of this document to make sure you did not miss any key configuration steps. Here is a more detailed list of what this tutorial will cover:
+Before you get started, please note that this tutorial is **meant for beginners**. Every step builds on all previous steps, so if you fully understand a step feel free to skip that step - please still read all of this document to make sure you did not miss any key configuration steps. Here is a more detailed list of what this tutorial will cover:
 - How to navigate to and from OIC, starting from the cloud login dashboard
 - How to build a connection
 - How to create and run a simple integration: REST endpoints
@@ -16,6 +16,7 @@ Before you get started, please note that this tutorial is **meant for beginners*
 Here is what you'll need for the tutorial that is **NOT** covered in this tutorial (i.e. prerequisites):
 - Oracle Cloud tenancy
 	- You can create a free trial account [starting here](https://www.oracle.com/cloud/free/). There will be a step in which you will need to provide your credit card information. This is for identity purposes, and your card will never be charged without your approval; other FAQs are answered [here](https://www.oracle.com/cloud/free/faq.html). If you do create a free trial account, you do not have to worry about anything money related mentioned in this tutorial, and know that you have either 30 days or until your trial account money is used up to keep any non-free-tier items running on your trial account.
+- Basic Auth User; for now, any user that is not Oracle SSO or is not federated will do.
 - An application to integrate with (this is provided, but feel free to try to connect OIC to your own application after you complete this tutorial)
 - Basic Javascript and REST knowledge
 
@@ -29,7 +30,6 @@ By the end of this tutorial, it is expected that you will be able to create your
 In this step, you will navigate to and from OIC. You will need to travel along this path: (Oracle cloud)->(cloud dashboard)->(integration instance page)->(OIC home)->(integration dashboard).
 
 ### 1.1: Logging in to Oracle Cloud (OCI)
-<!-- **NOTE**: Oracle, just like any other big business, is infamous for its numerous acronyms, of which number far more than its multi-thousand products. OCI refers to the cloud, usually the Gen 2 cloud (see the keynote addresses for Oracle Open World (OOW) 2016), whereas OIC refers to _integration_ cloud. Yes it's confusing but we get by and also we love our TLAs - three-lettered acronyms. We could have made it OCIPASS: Oracle Cloud Infrastructure, Platform, and Software Services. But who has time to read seven letters?? -->
 1. Open a web browser and navigate to [cloud.oracle.com](cloud.oracle.com).
 <img src="images/OIC-1.01.png" width="100%" title="Oracle cloud home page">
 2. Enter the name of your account/tenancy.
@@ -38,7 +38,7 @@ In this step, you will navigate to and from OIC. You will need to travel along t
 <img src="images/OIC-1.03.png" width="100%" title="username user.name@email.com, password password is NOT a default user/pass combination for OCI">
 
 ### 1.2: Navigating to the Integration Dashboard
-1. Once you login to your cloud tenancy, you will arrive at one of three pages: the PaaS dashboard, IaaS dashboard, or the classic dashboard.
+1. Once you login to your cloud tenancy, you will arrive at one of two pages: the PaaS dashboard or the IaaS dashboard.
 	1. If the Integration link appears for you (first image) then you can click **Integration**. Otherwise you can navigate to the same page by selecting the hamburger menu on the top left corner (it looks like three horizontal lines stacked vertically, or a capital Greek Xi Ξ in some type faces) and selecting **Integration** (second image). Note: this might take you to an intermediate page in which you will have to click **Open Service Console** (third image).
 	<img src="images/OIC-1.04.png" width="100%" title="Platform Services dashboard">
 	<img src="images/OIC-1.05.png" width="100%" title="PaaS to Integration via hamburger menu">
@@ -46,8 +46,6 @@ In this step, you will navigate to and from OIC. You will need to travel along t
 	2. Alternatively, you might find yourself at the IaaS dashboard (first image). In that case, select the hamburger menu on the top left corner, scroll down to **Platform Services**, and select **Integration** (second image). This may open a new tab or window.
 	<img src="images/OIC-1.07.png" width="100%" title="Infrastructure Services dashboard">
 	<img src="images/OIC-1.08.png" width="100%" title="IaaS to Integration via hamburger menu">
-	3. TODO classic part
-	<!-- 3. Finally, if you arrived at the classic dashboard...you screwed up. Game over. Just give up now. I don't usually say that OCI classic sucks but when I do I mean it. There's a whole multitude of memes I could make revolving around the fact that OIC classic is an embarrassment to Oracle that will make even the most design- and utilitarian-deaf wonder: is this a professional webpage? Actually, if you come here just try one of the webpages that you see in the previous 5 images, replacing my information with your information, and maybe one of them will work. -->
 2. Finally you will arrive at the Integration Instance page. It looks like this:
 <img src="images/OIC-1.09.png" width="100%" title="Integration Instance page">
 3. If you see an instance you are authorized to create test integrations on, skip this step. Otherwise you will need to provision an OIC instance. Click **Create Instance** and fill in the details however you want with these constraints:
@@ -76,10 +74,11 @@ Here's an example:
 
 A **connection** is a way for OIC to connect to some application, including third-party applications, applications running on Oracle software, or even other integrations on OIC. A connection is based off of an **Adapter**. By default, you should see under the list of Connections (upper-left hamburger menu -> Connections) that there are already some sample connections built, including but not limited to the **Sample REST Endpoint Interface**. You will use the **Sample REST Endpoint Interface** and you will also create your own connection. First, however, you will need to define what exactly OIC is connecting to.
 
-At [https://oic101.herokuapp.com/](https://oic101.herokuapp.com/), you will see a very simple application that has exposed two REST endpoints: `/callOic` and `/responseFromOic`. You can see this in the code below:
+At [https://oic101.herokuapp.com/](https://oic101.herokuapp.com/), you will see a very simple application that has exposed two REST endpoints: `/callOic` and `/responseFromOIC`. You can see this in the code below:
 <img src="images/OIC-2.01.png" width="100%" title="Exposed REST endpoints of this application">
 - The `callOic` endpoint is a POST call: this means that this application is configured to receive a payload from somewhere. In this case, that somewhere is OIC. For now, the only piece of information you need is that the endpoint to call is `https://oic101.herokuapp.com/callOic`.
-- The `responseFromOic` endpoint is a GET call: this means that this application will return some information when you enter the address `https://oic101.herokuapp.com/callOic` in a web browser (since web browsers by default make a GET request to any website you enter). OIC does not call this endpoint; instead, you can view the information stored in the application when you invoke `https://oic101.herokuapp.com/responseFromOic` in a web browser.
+- The `responseFromOIC` endpoint is a GET call: this means that this application will return some information when you enter the address `https://oic101.herokuapp.com/callOic` in a web browser (since web browsers by default make a GET request to any website you enter). OIC does not call this endpoint; instead, you can view the information stored in the application when you invoke `https://oic101.herokuapp.com/responseFromOIC` in a web browser.
+	- Notice how the default message for the `responseFromOIC` endpoint is simply `Hello world!!!`. You will change this message to demonstrate that a successful connection between OIC and this application was made.
 
 ### Creating a connection
 Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initial and final reminder to save in this tutorial; OIC does not have an "autosave" feature for connections or integrations.
@@ -136,6 +135,7 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 	| Relative Resource URI     | /callOic                           |
 	| Action to perform         | POST                               |
 	| Configure request payload | (check this box)                   |
+
 	<img src="images/OIC-3.09.png" width="100%" title="A substantially more complex REST trigger">
 	3. Since this connection is a POST request, and since **Configure a request payload for this endpoint** is checked, you will have to define the format that the application will recognize. In this case, the format that is recognized is a JSON payload consisting of a single `message` (String) object. Here is a valid body that would be sent over to the application:
 	```
@@ -153,18 +153,42 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 6. Configure the map called "Map to sendToApp".
 	1. Click on the map and select the pencil icon. For reference, the eyeball icon allows you to view the map, the pencil icon allows you to edit the map, and the menu/details opens a menu with more options.
 	<img src="images/OIC-3.13.png" width="100%" title="How to edit a map">
-	2. The map dialog opens, detailing all elements prior to this map on the left side and all inputs to the immediate next element on the right side. In this case, the immediate next element is the REST connection to the application, sendToApp, and it was defined to have a payload containing a single "message" object of type string. Click "\*message" (first image), click on the line that says "-- Drag and Drop or Type value here...", and enter a random value (second image), for instance "This is a message from OIC." Click **Save**, then **Close**, and finally **Validate** and then **Close**.
+	2. The map dialog opens, detailing all elements prior to this map on the left side and all inputs to the immediate next element on the right side. In this case, the immediate next element is the REST connection to the application, sendToApp, and it was defined to have a payload containing a single "message" object of type string. Click "\*message" (first image), click on the line that says "-- Drag and Drop or Type value here...", and enter a random value (second image), for instance "This is a message from OIC." This message must be different from the default value of the message stored on the application, which is "Hello world!!!". Click **Save** to save the map, then **Close**, and finally **Validate** and then **Close**.
 	<img src="images/OIC-3.14.png" width="100%" title="Contents of a map">
 	<img src="images/OIC-3.15.png" width="100%" title="Hard-code the value of message">
-7. All working parts of the integration are now configured properly. Before activation, all integrations must have one of the initial variables enabled for tracking. What this means is that when a user checks all instances of integrations that have been triggered, the user will be able to find the (usually) unique instance he/she is looking for, especially if there are errors in any of the tracked instances. You can see that there is an error, denoted by the red oval with a number 1 in it; this error is exactly the lack of a tracked variable. First, select the most hamburger-looking menu in the upper right corner, then click **Tracking** (first image). This opens a dialog box for tracking variables. **Click and drag** the only variable - `execute` - to the **Tracking Field** column (second image). Then click **Save**, and then **Save** and **Close** out of the integration (upper right corner).
+7. All working parts of the integration are now configured properly. Before activation, all integrations must have one of the initial variables enabled for tracking. What this means is that when a user checks all instances of integrations that have been triggered, the user will be able to find the (usually) unique instance he/she is looking for, especially if there are errors in any of the tracked instances. You can see that there is an error, denoted by the red oval with a number 1 in it; this error is exactly the lack of a tracked variable. First, select the most hamburger-looking menu in the upper right corner, then click **Tracking** (first image). This opens a dialog box for tracking variables. **Click and drag** the only variable - `execute` - to the **Tracking Field** column (second image). Then click **Save** to save the tracked variable, and then **Save** and **Close** out of the integration (upper right corner).
 <img src="images/OIC-3.16.png" width="100%" title="Where is the tracking menu?">
-<img src="images/OIC-3.17.png" width="100%" title="Just track any variable that you see">
+<img src="images/OIC-3.17.png" width="100%" title="Track the most important variable that you see; you only need one">
 
 ## **STEP 4**: Run and Track the integration
 
+At this point, the integration should be ready for activation. **Return to the Integration dashboard** if you have not already done so. You should see something that looks like this:
+<img src="images/OIC-4.01.png" width="100%" title="Integrations that are in progress, ready for activation, and activated">
+If a **pencil icon** appears in the place of a white switch, the integration is not ready for activation. Please check that you have completed all parts of section 3 before moving on.
+
 ### 4.1: Activate the integration
+1. Click the switch icon. This brings you to a dialog box. Uncheck "Contribute integration mappings..." and check "Enable tracing". Once it appears, also check "Include payload". Finally, click **Activate**. You should see a screen that looks like the second image when you have successfully activated the integration.
+<img src="images/OIC-4.02.png" width="100%" title="Activating integration">
+<img src="images/OIC-4.03.png" width="100%" title="Successful activation">
+**NOTE**: For development and testing environments, it is ok to include the payload for debugging purposes. However, to be best-practice complaint, you should not include the payload for production environments. Also, this payload will appear in the **activity stream** or **activity log** (see [Activity Log](#activity) under Miscellaneous important information within OIC).
+
+2. At the very top, a green banner with two links should appear. Navigate to the website that looks something like `https://oic-ne-sc-orasenatdoracledigital01.integration.ocp.oraclecloud.com/ic/api/integration/v1/flows/rest/OIC101_INTEGRATION/1.0/metadata`. You can do this by clicking the corresponding link in the green banner, or you can click a new **gear icon** that gives you equivalent links (first image). Both of these take you to the metadata page (second image).
+<img src="images/OIC-4.04.png" width="100%" title="Running the integration">
+<img src="images/OIC-4.05.png" width="100%" title="Metadata page">
+3. The above page is exactly the page spawned by using the Sample REST Endpoint Interface. Notice that the first URL is the Endpoint URL; this is the only one that is important to running the integration as of now. Clicking that link will **trigger** the integration to run, as the trigger of the integration was defined to look for a GET request at the `/` resource (nothing additional after the initial URL). **Click the first link**; you may need to enter your credentials for Oracle Cloud again.
+4. After a while, the page shows up as blank. This is a good sign; this indicates that the application has run without errors. Usually, any errors (e.g. 404, 500, 401) will print an eponymous message here if they were encountered during runtime. Navigate to https://oic101.herokuapp.com/responseFromOIC to see that the string you assigned in the mapping has indeed appeared as the message to this application. You have successfully built and run your first working integration using Oracle Integration Cloud!
+<img src="images/OIC-4.06.png" width="100%" title="This is a picture from Github. Or is it...">
 
 ### 4.2: Track instances and view the application
+Now that the integration has run at least once, you can view the integration's progress in the **tracking** page.
+1. Navigate back to the integration dashboard. In the upper-left corner, select the **hamburger menu** to open the left sidebar menu, then click the **left chevron** next to "Designer" (first image). Click **Monitoring**, then **Tracking** (second image).
+<img src="images/OIC-4.07.png" width="100%" title="Integration dashboard">
+<img src="images/OIC-4.08.png" width="100%" title="Instance tracking">
+**NOTE**: Currently you are only viewing instances that were run from an hour ago; you can request as much as three days ago or a custom range. Also, if you suspect that another instance was run after you last loaded this page, you can click the refresh icon next to the UTC time stamp: NOT the refresh button for the whole page.
+
+2. Here, you can drill down into the instances that were most recently run. **Click** on "execute: undefined" to drill down into the instance. You should see a copy of the integration that shows the flow of the current selected instance of when the integration was triggered.
+<img src="images/OIC-4.09.png" width="100%" title="Integration flow for the current selected instance">
+**NOTE**: You should see a successful instance relating to the most recent run of the integration, noted by a green check mark next to "completed" (as in the above image). If there was an error, you should see instead a red X next to "failed". In the unlikely event that your instance is marked as failed, you can still drill down to see which component of the integration failed (marked as red). You can then select that component and click on the error symbol (a triangle with an exclamation point) to view the error that caused the integration to break.
 
 
 ## **STEP 5**: Modify the integration
@@ -180,6 +204,7 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 ### Integration components
 
 ### Activity Log
+<div id="activity"/>
 
 ### Variable Tracking
 
