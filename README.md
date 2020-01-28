@@ -213,15 +213,17 @@ Now that the integration has run at least once, you can view the integration's p
 <img src="images/OIC-4.07.png" width="100%" title="Integration dashboard">
 <img src="images/OIC-4.08.png" width="100%" title="Instance tracking">
 
-**NOTE**: Currently you are only viewing instances that were run from an hour ago; you can request as much as three days ago or a custom range. Also, if you suspect that another instance was run after you last loaded this page, you can click the refresh icon next to the UTC time stamp: NOT the refresh button for the whole page.
+**NOTE**: You should see a successful instance relating to the most recent run of the integration, noted by a green check mark next to "completed" (as in the above image). If there was an error, you should see instead a red X next to "failed". Currently you are only viewing instances that were run from an hour ago; you can request as much as three days ago or a custom range. Also, if you suspect that another instance was run after you last loaded this page, you can click the refresh icon next to the UTC time stamp: NOT the refresh button for the whole page.
 
-2. Here, you can drill down into the instances that were most recently run. **Click** on "execute: undefined" to drill down into the instance. You should see a copy of the integration that shows the flow of the current selected instance of when the integration was triggered.
+2. Here, you can drill down into the instances that were most recently run. **Click** on "execute: undefined" to drill down into the instance. You should see a copy of the integration that shows the flow of the current selected instance of when the integration was triggered, outlined in green.
 <img src="images/OIC-4.09.png" width="100%" title="Integration flow for the current selected instance">
 
-**NOTE**: You should see a successful instance relating to the most recent run of the integration, noted by a green check mark next to "completed" (as in the above image). If there was an error, you should see instead a red X next to "failed". In the unlikely event that your instance is marked as failed, you can still drill down to see which component of the integration failed (marked as red). You can then select that component and click on the error symbol (a triangle with an exclamation point) to view the error that caused the integration to break.
+**NOTE**: In the unlikely event that your instance is marked as failed, you can still drill down to see which component of the integration failed (marked as red). You can then select that component and click on the error symbol (a triangle with an exclamation point) to view the error that caused the integration to break.
 
 
 ## **STEP 5**: Modify the integration
+
+TODO: all parts beyond this point are not essential to the lab. It will slowly be filled in later.
 
 ### 5.1: Modify the integration
 
