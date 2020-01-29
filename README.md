@@ -189,7 +189,7 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 
 At this point, the integration should be ready for activation. **Return to the Integration dashboard** if you have not already done so. You should see something that looks like this:
 <img src="images/OIC-4.01.png" width="100%" title="Integrations that are in progress, ready for activation, and activated">
-If a **pencil icon** appears in the place of a white switch, the integration is not ready for activation. Please check that you have completed all parts of section 3 before moving on.
+If a **pencil icon** appears in the place of a white switch, the integration is not ready for activation. Please check that you have completed all parts of section 3 before moving on. If a **lock icon** appears in the place of a white switch, this indicates that another session is in progress right now. This can happen if another user is currently editing your integration, or if you were moved out of edit mode by a page refresh or some navigation away from your integration other than clicking **close**. In this case, you must first unlock your integration by clicking the hamburger menu on the right side of the rectangle containing your integration, then select **unlock**. Then you will be able to activate your integration if the white switch appears.
 
 ### 4.1: Activate the integration
 1. Click the switch icon. This brings you to a dialog box. Uncheck "Contribute integration mappings..." and check "Enable tracing". Once it appears, also check "Include payload". Finally, click **Activate**. You should see a screen that looks like the second image when you have successfully activated the integration.
@@ -223,11 +223,61 @@ Now that the integration has run at least once, you can view the integration's p
 
 ## **STEP 5**: Modify the integration
 
-TODO: all parts beyond this point are not essential to the lab. It will slowly be filled in later.
+In **STEP 3**, part 6, you configured a map to send a hard-coded string to the Heroku application. In this step, you will change your integration to instead send a string based on a parameter.
 
 ### 5.1: Modify the integration
+Once again, don't forget to save every now and then.
+1. First, deactivate your integration. You can do this by either clicking the hamburger menu on the right side of the rectangle containing your integration, then "Deactivate", or by clicking the switch (now green and with a check mark). Once you see a green banner at the top and that the switch has turned "off" (is now white), you will have deactivated your integration.
+<img src="images/OIC-5.01.png" width="100%" title="Deactivating your integration">
+
+2. Click on the integration to navigate into the integration, and select the first component, or the trigger to edit.
+<img src="images/OIC-5.02.png" width="100%" title="Back to integration editing">
+
+3. On the left menu, select **Basic Info**, then select the check box for **Add and review parameters for this endpoint**. Then click **Next**.
+<img src="images/OIC-5.03.png" width="100%" title="Add and review parameters for this endpoint">
+
+4. Instead of taking you directly to the summary, the dialog box instead enables you to configure a parameter now. Click the + to add a parameter. Call the parameter `qmessage`, and set its data type to be "string".
+<img src="images/OIC-5.04.png" width="100%" title="Setting a parameter">
+
+5. Click **Next** and **Done**. A dialog box will pop up informing you that a change to this component will affect a map that depends on this component: select **Update**. The map in question is the map right after the trigger component. Select the **Map to sendToApp** to edit.
+<img src="images/OIC-5.05.png" width="100%" title="Edit the map again">
+
+**NOTE**: You will also notice that upon updating the trigger, the old variable you were tracking `execute` now contains a new object called `QueryParameters`. OIC cannot track variables that are not leaf nodes, i.e. have no children variables. You can confirm this by looking at which variable has a "dropdown menu" (not a leaf node) and which variables do not (is a leaf node). You will have to re-track a variable.
+
+6. Right click the **\*message** row on the right and select **Delete Mapping** (first image). Once you are done, drag the `qmessage` variable from the left side to the `*message` variable on the right side (second image). Finally, click **Validate** and then **Close** in the upper right corner.
+<img src="images/OIC-5.06.png" width="100%" title="Delete the mapping">
+<img src="images/OIC-5.07.png" width="100%" title="Make an actual mapping">
+
+7. Finally, you will have to track a variable. First, enter the tracking dialog box (consult part 7 of **STEP 3** for more information). Then drag the **qmessage** field onto the tracking field. The result should look something like below. Click **Save**. Then **Save** and **Close** out of your integration.
+<img src="images/OIC-5.08.png" width="100%" title="Re-track some variable">
+
+**NOTE**: Now that you are tracking a variable with meaningful content, you will notice that in the tracking menu each tracked instance will be somewhat unique as opposed to the `execute: undefined` generic tracked variable.
 
 ### 5.2: Run and Track the integration
+1. Click the white switch to activate your integration. Once again, deselect **Contribute integration mappings...**, and select **Enable tracing** and **Include payload**.
+<img src="images/OIC-5.09.png" width="100%" title="Activate the integration again">
+
+2. This time, **Copy** the endpoint string. You will need to add a parameter to the URL. In my case, the endpoint string is:
+```
+https://OIC-NE-SC-orasenatdoracledigital01.integration.ocp.oraclecloud.com:443/ic/api/integration/v1/flows/rest/OIC101_INTEGRATION/1.0/
+```
+To add a message, append the string `qmessage=Hello again` at the end of the URL, replacing `Hello again` with whatever string you wish. Quotes are optional; any "special characters" such as spaces are replaced in the browser by a code represented by that character's hexadecimal value. Here are examples of the same valid GET URL:
+```
+https://OIC-NE-SC-orasenatdoracledigital01.integration.ocp.oraclecloud.com:443/ic/api/integration/v1/flows/rest/OIC101_INTEGRATION/1.0?qmessage=Hello again
+https://OIC-NE-SC-orasenatdoracledigital01.integration.ocp.oraclecloud.com:443/ic/api/integration/v1/flows/rest/OIC101_INTEGRATION/1.0?qmessage=Hello%20again
+```
+Note that the last slash after "1.0" is optional. Once you have built your URL, enter the URL into a web browser to make the GET request. Remember to navigate to https://oic101.herokuapp.com/responseFromOIC to view the latest string sent over!
+
+3. Navigate to the Tracking screen (see section 4.2 of **STEP 4**). Here I have tested a series of strings in the parameter, using the following URLs:
+
+| URL                              | Message from OIC | Comments                 |
+|----------------------------------|------------------|--------------------------|
+| `.../1.0/`                       |                  | No string was sent over. |
+| `.../1.0/?qmessage="Hey!"`       | `"Hey!"`         |                          |
+| `.../1.0/?qmessage=Hello again`  | `Hello again`    |                          |
+| `.../1.0?qmessage=Hi%20again`    | `Hi again`       |                          |
+| `.../1.0?qmessage=%97%98`        | `��`	          | Apparently %97 and %98 point to undefined encodings or unrecognized special characters. 97 and 98 are the decimal representations of 'a' and 'b', but in hexadecimal they are the characters 151 and 152, which should be 'ù' and 'ÿ'. |
+| `.../1.0?qmessage=Hello%20again` | `Hello again`    |                          |
 
 
 ## Miscellaneous important information within OIC
