@@ -1,11 +1,11 @@
-# Oracle Integration Cloud: The Tutorial
+# Oracle Integration Cloud Workshop
 
 This document shows how to use Oracle Integration Cloud (OIC) at the very basic level.
 
 
 ## Purpose
 
-Before you get started, please note that this tutorial is **meant for beginners**. Every step builds on all previous steps, so if you fully understand a step feel free to skip that step - please still read all of this document to make sure you did not miss any key configuration steps. Here is a more detailed list of what this tutorial will cover:
+Before you get started, please note that this workshop is **meant for beginners**. Every step builds on all previous steps, so if you fully understand a step feel free to skip that step - please still read all of this document to make sure you did not miss any key configuration steps. Here is a more detailed list of what this workshop will cover:
 - How to navigate to and from OIC, starting from the cloud login dashboard
 - How to build a connection
 - How to create and run a simple integration: REST endpoints
@@ -13,14 +13,14 @@ Before you get started, please note that this tutorial is **meant for beginners*
 - Locations of various important pieces of information
 	- e.g. Activity Log, Variable Tracking
 
-Here is what you'll need for the tutorial that is **NOT** covered in this tutorial (i.e. prerequisites):
+Here is what you'll need for the workshop that is **NOT** covered in this workshop (i.e. prerequisites):
 - Oracle Cloud tenancy
-	- You can create a free trial account [starting here](https://www.oracle.com/cloud/free/). There will be a step in which you will need to provide your credit card information. This is for identity purposes, and your card will never be charged without your approval; other FAQs are answered [here](https://www.oracle.com/cloud/free/faq.html). If you do create a free trial account, you do not have to worry about anything money related mentioned in this tutorial, and know that you have either 30 days or until your trial account money is used up to keep any non-free-tier items running on your trial account.
+	- You can create a free trial account [starting here](https://www.oracle.com/cloud/free/). There will be a step in which you will need to provide your credit card information. This is for identity purposes, and your card will never be charged without your approval; other FAQs are answered [here](https://www.oracle.com/cloud/free/faq.html). If you do create a free trial account, you do not have to worry about anything money related mentioned in this workshop, and know that you have either 30 days or until your trial account money is used up to keep any non-free-tier items running on your trial account.
 - Basic Auth User; for now, any user that is not Oracle SSO or is not federated will do.
-- An application to integrate with (this is provided, but feel free to try to connect OIC to your own application after you complete this tutorial)
+- An application to integrate with (this is provided, but feel free to try to connect OIC to your own application after you complete this workshop)
 - Basic Javascript and REST knowledge
 
-By the end of this tutorial, it is expected that you will be able to create your own integrations and know where to get help if you get stuck. Don't be afraid to search the internet for a specific error, the REST API catalog on OIC, or just general information on something you noticed while playing around with the OIC dashboard.
+By the end of this workshop, it is expected that you will be able to create your own integrations and know where to get help if you get stuck. Don't be afraid to search the internet for a specific error, the REST API catalog on OIC, or just general information on something you noticed while playing around with the OIC dashboard.
 
 
 # Let's get started
@@ -62,7 +62,7 @@ Here's an example:
 <img src="images/OIC-1.10.png" width="100%" title="Provisioning instance page 1">
 <img src="images/OIC-1.11.png" width="100%" title="Provisioning instance page 2; defaults selected">
 <img src="images/OIC-1.12.png" width="100%" title="Provisioning instance page 3">
-**NOTE**: this instance was not actually created. For the remainder of this tutorial, all future graphics refer to the "OIC-NE-SC" instance.
+**NOTE**: this instance was not actually created. For the remainder of this workshop, all future graphics refer to the "OIC-NE-SC" instance.
 
 4. Once your instance is provisioned, you will see that the instance is ready to use. To navigate to OIC home, click the small hamburger menu indicated by the red arrow in the below image, then click **Open Oracle Integration Home Page**. You should see a similar screen as shown in the second image
 <img src="images/OIC-1.13.png" width="100%" title="Navigating to OIC home">
@@ -86,7 +86,7 @@ At [https://oic101.herokuapp.com/](https://oic101.herokuapp.com/), you will see 
 	- Notice how the default message for the `responseFromOIC` endpoint is simply `Hello world!!!`. You will change this message to demonstrate that a successful connection between OIC and this application was made.
 
 ### Creating a connection
-Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initial and final reminder to save in this tutorial; OIC does not have an "autosave" feature for connections or integrations.
+Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initial and final reminder to save in this workshop; OIC does not have an "autosave" feature for connections or integrations.
 1. If you haven't already, click the upper left hamburger menu and select **Connections**.
 <img src="images/OIC-2.02.png" width="100%" title="Navigating to Connections">
 <img src="images/OIC-2.03.png" width="100%" title="Connections">
@@ -94,7 +94,7 @@ Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initia
 2. Click **Create** in the upper right corner, then scroll down or search for REST. Select REST to proceed to the configuration page.
 <img src="images/OIC-2.04.png" width="100%" title="Initializing REST connection">
 
-3. Enter a descriptive name for the connection. For the purpose of the tutorial you can enter "OIC101-connection". Make sure the Role is set to **Trigger and Invoke**.
+3. Enter a descriptive name for the connection. For the purpose of the workshop you can enter "OIC101-connection". Make sure the Role is set to **Trigger and Invoke**.
 <img src="images/OIC-2.05.png" width="100%" title="Connection configuration 1">
 
 **NOTE**: Trigger means that if this connection is added to an integration, the application configured in this connection will _trigger_ the integration to begin. Invoke means that if this connection is added to an integration, that integration will be able to _invoke_ the application configured in this connection while OIC is running through the process flow of the integration. In some cases it makes more sense to only trigger or only invoke - in this case it makes the most sense to only invoke - but for the most part it is safe to create connections that can serve both incoming and outgoing requests.
@@ -118,13 +118,13 @@ Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initia
 An **Integration** describes a process flow that performs a group of functions. Integrations can be triggered either by an application or by a schedule, called **Application-Driven Orchestrations** and **Scheduled Orchestrations** respectively. Integrations that are app-driven always use a defined connection that is configured as a trigger. Let's say that the connection is a Salesforce connection. Then in the integration, you would define the trigger to look for some kind of signal or API call, for instance when a contact is created in Salesforce. After some configuration on the Salesforce end, the integration will trigger whenever a contact is created in Salesforce. On the other hand, integrations that are scheduled rely on some schedule that will trigger the integration based on a frequency, for instance every day or every hour. This is more often used on a "gather-bulk-data" basis than a "one-action-one-trigger" basis, for instance moving all the logs between five minutes ago and last week to a backup server.
 
 ### Creating an integration
-Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initial and final reminder to save in this tutorial; OIC does not have an "autosave" feature for connections or integrations.
+Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initial and final reminder to save in this workshop; OIC does not have an "autosave" feature for connections or integrations.
 1. Navigate to the integration dashboard. It should look like the last image of section 1. If you are on the Connections page, click on the upper left hamburger menu and select **Integrations**.
 
 2. Click **Create** in the upper right corner. This brings up a dialog box with six types of integrations you can build. Select **App Driven Orchestration**.
 <img src="images/OIC-3.01.png" width="100%" title="Create Integration - Select a Style">
 
-3. Enter a descriptive name for the integration. For the purpose of the tutorial you can enter "OIC101-integration".
+3. Enter a descriptive name for the integration. For the purpose of the workshop you can enter "OIC101-integration".
 <img src="images/OIC-3.02.png" width="100%" title="Create Integration - Enter Important Information And Stuff">
 
 4. Now the trigger must be configured.
@@ -279,9 +279,29 @@ Note that the last slash after "1.0" is optional. Once you have built your URL, 
 | `.../1.0?qmessage=%97%98`        | `��`	          | Apparently %97 and %98 point to undefined encodings or unrecognized special characters. 97 and 98 are the decimal representations of 'a' and 'b', but in hexadecimal they are the characters 151 and 152, which should be 'ù' and 'ÿ'. |
 | `.../1.0?qmessage=Hello%20again` | `Hello again`    |                          |
 
+This concludes the workshop. You may keep the integration and connection if you wish. To download the source code for the Heroku application, please visit this link: https://github.com/OracleMichael/OIC101/blob/master/oic101.tar. You may then opt to deploy this code to your own Heroku app to further modify this application. Creating and maintaining a Heroku account is free, as long as no "add-ons" (e.g. Dynos, Metrics) are configured and you are the owner of no more than 5 applications.
+
+<!--
+## Where to go from here
+
+Let's review what you've learned.
+- In the beginning, you started with a Heroku application that requires some input, abstracted by a single string variable called `message`. In the real world, the Heroku app / `message` model represents _multiple_ business applications each requiring a specific CRUD operation (Create, Read, Update, Delete). This implies that the integration you've built - consisting of a single trigger and a single invoke - may need to perform many invokes for a business application. The integration may even need to perform some logic on its own instead of linearly invoking its many connections: this was never touched on in this workshop.
+- You built an integration that communicated with the Heroku app. This required the following:
+	- You created a REST connection that can call the various exposed endpoints built into the Heroku app. Usually, most business applications have far more than two exposed endpoints. In fact, some businesses will require specific authentication or configuration in order for OIC to be able to communicate with them, adding on layers of security and indicating that there are far more ways for OIC to connect with all the applications out there. REST just happens to be one of the most often used ways to invoke APIs, along with SOAP and maybe FTP.
+	- You needed to understand the exposed endpoints available on the Heroku application to build the connection. Many business applications will have richer documentation on their endpoints than what is provided at the beginning of **STEP 2**.
+- In the end, you built an integration layer on top of the initial Heroku app. The integration layer performs all of the automation necessary to invoke other key parts of some business in progress, simulated by the lone Heroku app. Meanwhile, **some application can call the integration**, triggering all of the business logic in OIC. So if you have a second application, which you could also deploy on Heroku, you can have that application call the integration, sending some information recognized by the integration (this would be in the form of a parameter in the GET), to trigger the rest of it.
+
+Overall, you learned the **basics of navigating OIC**, how to **build integrations** on OIC, and how to **view runtime issues**.
+-->
+Here are a few links to other workshops/guides on OIC that teach you how to build more complex integrations:
+[Connecting Autonomous Transaction Processing (ATP) with OIC](https://github.com/OracleCPS/ATPworkshop)
+[Integrating OIC with SaaS applications](https://github.com/OracleCPS/oicsaasintegration) (start with lab 200 or 300)
+
 
 ## Miscellaneous important information within OIC
 <div id="misc"/>
+
+TODO: All parts beyond this point are optional. This information will slowly be filled in later.
 
 ### Integration components
 
