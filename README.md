@@ -15,10 +15,10 @@ Before you get started, please note that this workshop is **meant for beginners*
 
 Here is what you'll need for the workshop that is **NOT** covered in this workshop (i.e. prerequisites):
 - Oracle Cloud tenancy
-	- You can create a free trial account [starting here](https://www.oracle.com/cloud/free/). There will be a step in which you will need to provide your credit card information. This is for identity purposes, and your card will never be charged without your approval; other FAQs are answered [here](https://www.oracle.com/cloud/free/faq.html). If you do create a free trial account, you do not have to worry about anything money related mentioned in this workshop, and know that you have either 30 days or until your trial account money is used up to keep any non-free-tier items running on your trial account.
+	- You can create a free trial account [starting here](https://www.oracle.com/cloud/free/). There will be a step in which you will need to provide your credit card information. This is for identity purposes, and your card will never be charged without your approval; other FAQs are answered [here](https://www.oracle.com/cloud/free/faq.html). If you do create a free trial account, you do not have to worry about anything money related, and know that you have either 30 days or until your trial account money is used up to keep running any non-free-tier applications on your trial account.
 - Basic Auth User; for now, any user that is not Oracle SSO or is not federated will do.
-- An application to integrate with (this is provided, but feel free to try to connect OIC to your own application after you complete this workshop)
 - Basic Javascript and REST knowledge
+- An application to integrate with (this is provided, but feel free to try to connect OIC to one of your own applications after you complete this workshop)
 
 By the end of this workshop, it is expected that you will be able to create your own integrations and know where to get help if you get stuck. Don't be afraid to search the internet for a specific error, the REST API catalog on OIC, or just general information on something you noticed while playing around with the OIC dashboard.
 
@@ -44,7 +44,7 @@ In this step, you will navigate to and from OIC. You will need to travel along t
 	<img src="images/OIC-1.04.png" width="100%" title="Platform Services dashboard">
 	<img src="images/OIC-1.05.png" width="100%" title="PaaS to Integration via hamburger menu">
 	<img src="images/OIC-1.06.png" width="100%" title="Open Service Console">
-	
+
 	2. Alternatively, you might find yourself at the IaaS dashboard (first image). In that case, select the hamburger menu on the top left corner, scroll down to **Platform Services**, and select **Integration** (second image). This may open a new tab or window.
 	<img src="images/OIC-1.07.png" width="100%" title="Infrastructure Services dashboard">
 	<img src="images/OIC-1.08.png" width="100%" title="IaaS to Integration via hamburger menu">
@@ -54,7 +54,7 @@ In this step, you will navigate to and from OIC. You will need to travel along t
 
 3. If you see an instance you are authorized to create test integrations on, skip this step. Otherwise you will need to provision an OIC instance. Click **Create Instance** and fill in the details however you want with these constraints:
 	- Satisfy all items that have an asterisk \* next to them.
-	- Select your home region.
+	- Select your home region. Almost always this is the default value.
 	- Make sure you select the proper license type: check with your Oracle representative and/or confirm that you own an integration software license (remember: THIS COSTS MONEY).
 	- Leave the Details page as its defaults, selecting an integer between 1 and 3 for "Number of 20K Messages Per Hour Packs". You may opt to choose "Integration and Process" if you have purchased the Enterprise edition and if you plan on creating process automation some time in the future (e.g. with process applications and decision models), but this is potentially more expensive.
 
@@ -64,7 +64,7 @@ Here's an example:
 <img src="images/OIC-1.12.png" width="100%" title="Provisioning instance page 3">
 **NOTE**: this instance was not actually created. For the remainder of this workshop, all future graphics refer to the "OIC-NE-SC" instance.
 
-4. Once your instance is provisioned, you will see that the instance is ready to use. To navigate to OIC home, click the small hamburger menu indicated by the red arrow in the below image, then click **Open Oracle Integration Home Page**. You should see a similar screen as shown in the second image
+4. Once your instance is provisioned, you will see that the instance is ready to use. To navigate to OIC home, click the small hamburger menu indicated by the red arrow in the below image, then click **Open Oracle Integration Home Page**. You should see a similar screen as shown in the second image.
 <img src="images/OIC-1.13.png" width="100%" title="Navigating to OIC home">
 <img src="images/OIC-1.14.png" width="100%" title="OIC home">
 
@@ -72,18 +72,18 @@ Here's an example:
 <img src="images/OIC-1.15.png" width="100%" title="Navigating to Integration dashboard">
 <img src="images/OIC-1.16.png" width="100%" title="Integration dashboard">
 
-**Note**: you should automatically be brought to the "Designer" menu. You can confirm this by selecting the upper left hamburger menu to bring up a grey left sidebar with seven items: Integrations, Connections, Lookups, Packages, Agents, Adapters, and Libraries. Please view the [Miscellaneous important information within OIC](#misc) section below for more information.
+**Note**: you should automatically be brought to the "Designer" menu. You can confirm this by selecting the upper left hamburger menu to bring up a grey left sidebar with seven items: Integrations, Connections, Lookups, Packages, Agents, Adapters, and Libraries.<!-- Please view the [Miscellaneous important information within OIC](#misc) section below for more information. -->
 
 
 ## **STEP 2**: Connections
 
-A **connection** is a way for OIC to connect to some application, including third-party applications, applications running on Oracle software, or even other integrations on OIC. A connection is based off of an **Adapter**. By default, you should see under the list of Connections (upper-left hamburger menu -> Connections) that there are already some sample connections built, including but not limited to the **Sample REST Endpoint Interface**. You will use the **Sample REST Endpoint Interface** and you will also create your own connection. First, however, you will need to define what exactly OIC is connecting to.
+A **connection** is a way for OIC to connect to some application, including third-party applications, applications running on Oracle software, or even other integrations on OIC. A connection is based off of an **Adapter**. Oracle already provides most of the adapters you will ever have to use, but the most important ones are the REST, SOAP, and FTP adapters, given that for most applications you will need to use one of those three. By default, you should see under the list of Connections (upper-left hamburger menu -> Connections) that there are already some sample connections built, including but not limited to the **Sample REST Endpoint Interface**. You will use the **Sample REST Endpoint Interface** and you will also create your own connection. First, however, you will need to define what exactly OIC is connecting to.
 
 At [https://oic101.herokuapp.com/](https://oic101.herokuapp.com/), you will see a very simple application that has exposed two REST endpoints: `/callOic` and `/responseFromOIC`. You can see this in the code below:
 <img src="images/OIC-2.01.png" width="100%" title="Exposed REST endpoints of this application">
 - The `callOic` endpoint is a POST call: this means that this application is configured to receive a payload from somewhere. In this case, that somewhere is OIC. For now, the only piece of information you need is that the endpoint to call is `https://oic101.herokuapp.com/callOic`.
 - The `responseFromOIC` endpoint is a GET call: this means that this application will return some information when you enter the address `https://oic101.herokuapp.com/callOic` in a web browser (since web browsers by default make a GET request to any website you enter). OIC does not call this endpoint; instead, you can view the information stored in the application when you invoke `https://oic101.herokuapp.com/responseFromOIC` in a web browser.
-	- Notice how the default message for the `responseFromOIC` endpoint is simply `Hello world!!!`. You will change this message to demonstrate that a successful connection between OIC and this application was made.
+	- Notice how the default message for the `responseFromOIC` endpoint is simply `Hello world!!!`. You will change this message to demonstrate that a successful connection between OIC and this application was made. This is also the value that appears when the application restarts, i.e. goes offline after a period of inactivity.
 
 ### Creating a connection
 Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initial and final reminder to save in this workshop; OIC does not have an "autosave" feature for connections or integrations.
@@ -99,15 +99,17 @@ Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initia
 
 **NOTE**: Trigger means that if this connection is added to an integration, the application configured in this connection will _trigger_ the integration to begin. Invoke means that if this connection is added to an integration, that integration will be able to _invoke_ the application configured in this connection while OIC is running through the process flow of the integration. In some cases it makes more sense to only trigger or only invoke - in this case it makes the most sense to only invoke - but for the most part it is safe to create connections that can serve both incoming and outgoing requests.
 
-4. Click **Configure Connectivity**. A dialog box will pop up with two required properties to be set. Set **Connection Type** to be "REST API Base URL" and set **Connection URL** to the **base URL** of the heroku application, `https://oic101.herokuapp.com`.
+4. Click **Configure Connectivity**. A dialog box will pop up with two required properties to be set. Set **Connection Type** to be "REST API Base URL" and set **Connection URL** to the **base URL** of the heroku application, `https://oic101.herokuapp.com`. Do not include a slash `/` at the end.
 <img src="images/OIC-2.06.png" width="100%" title="Connection configuration 2">
 
 5. Scroll down to **Configure Security**. The application is pretty basic and does not require authentication; select "No Security Policy" for **Security Policy**.
 <img src="images/OIC-2.07.png" width="100%" title="Connection configuration 3">
 
-6. You do not need to configure an Agent for this connection. Scroll to the top and click **Test**. Once you see the green bar appear, or that the REST Connection becomes 100% configured (second image), click **Save** and then **Close**.
+6. You do not need to configure an Agent for this connection. Scroll to the top and click **Test**. Once you see the green bar appear near the top, or that the REST Connection becomes 100% configured (second image), click **Save** and then **Close**.
 <img src="images/OIC-2.08.png" width="100%" title="Connection configuration completed">
 <img src="images/OIC-2.09.png" width="100%" title="Testing completed">
+
+**NOTE**: The default timeout for OIC on testing connections is 5 minutes, but usually if the connection is still testing after 10 or 20 seconds it's a good sign that the connection will not test successfully. In that case, you will have to refresh and start from where you last saved; this connection should not take longer than 10 seconds to test.
 
 7. The connection should be ready to use, indicated by the green check mark on the right side of the window.
 <img src="images/OIC-2.10.png" width="100%" title="Connection ready to use">
@@ -115,7 +117,7 @@ Remember to ***FREQUENTLY SAVE YOUR CONNECTIONS***. There will only be an initia
 
 ## **STEP 3**: Integrations
 
-An **Integration** describes a process flow that performs a group of functions. Integrations can be triggered either by an application or by a schedule, called **Application-Driven Orchestrations** and **Scheduled Orchestrations** respectively. Integrations that are app-driven always use a defined connection that is configured as a trigger. Let's say that the connection is a Salesforce connection. Then in the integration, you would define the trigger to look for some kind of signal or API call, for instance when a contact is created in Salesforce. After some configuration on the Salesforce end, the integration will trigger whenever a contact is created in Salesforce. On the other hand, integrations that are scheduled rely on some schedule that will trigger the integration based on a frequency, for instance every day or every hour. This is more often used on a "gather-bulk-data" basis than a "one-action-one-trigger" basis, for instance moving all the logs between five minutes ago and last week to a backup server.
+An **Integration** describes a process flow that performs a group of functions. Integrations can be triggered either by an application or by a schedule, called **Application-Driven Orchestrations** and **Scheduled Orchestrations** respectively. There are four other types of integrations, but these two are the most commonly used. Integrations that are **app-driven** always use a defined connection that is configured as a trigger. Let's say that the connection is a Salesforce connection. Then in the integration, you would define the trigger to look for some kind of signal or API call, for instance when a contact is created in Salesforce. After some configuration on the Salesforce end, the integration will trigger whenever a contact is created in Salesforce. On the other hand, integrations that are **scheduled** rely on some schedule that will trigger the integration based on a frequency, for instance every day or every hour. This is more often used on a "gather-bulk-data" basis than a "one-action-one-trigger" basis, for instance moving all the logs between five minutes ago and last week to a backup server every week.
 
 ### Creating an integration
 Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initial and final reminder to save in this workshop; OIC does not have an "autosave" feature for connections or integrations.
@@ -147,7 +149,7 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 	<img src="images/OIC-3.08.png" width="100%" title="The click and drag method, also revisited and also equally more fun than the immediately above">
 
 	2. A dialog box will appear. Enter the following information:
-	
+
 	| Field name                | Value                              |
 	|---------------------------|------------------------------------|
 	| Endpoint name             | sendToApp                          |
@@ -158,7 +160,7 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 
 	<img src="images/OIC-3.09.png" width="100%" title="A substantially more complex REST trigger">
 
-	3. Since this connection is a POST request, and since **Configure a request payload for this endpoint** is checked, you will have to define the format that the application will recognize. In this case, the format that is recognized is a JSON payload consisting of a single `message` (String) object. Here is a valid body that would be sent over to the application:
+	3. Since this connection is a POST request, and since **Configure a request payload for this endpoint** is checked, you will have to define the format that the application will recognize. In this case, the format that is recognized is a JSON payload consisting of a single `message` (String) object. Here is a valid `body` that would be sent over to the application:
 	```
 	"body": {
 		"message": "some string value"
@@ -170,14 +172,14 @@ Remember to ***FREQUENTLY SAVE YOUR INTEGRATIONS***. There will only be an initi
 
 	4. After configuring, you should see a screen similar to this one. Note: you can click the icon pointed out below to automatically center and zoom out to fit all integration components.
 	<img src="images/OIC-3.12.png" width="100%" title="Finished configuring invoke">
-**What's going on here?** This connection was configured originally to contact the base URL, or `https://oic101.herokuapp.com`. When the connection was added to the integration, the relative resource URI was `callOic`. This means that when the integration reaches this component, OIC will make a POST call to `https://oic101.herokuapp.com/callOic`, which is precisely the URL to hit. Also, the payload/body sent along with the POST request was of the form `{ "message": ""}`, which is the format that the application recognizes (a single object called "message" of type string, as indicated by the empty double quotes). Even though the format has been defined, the actual payload has yet to be sent over. You will hard-code this string first, then modify the integration to dynamically accept any string based on a parameter.
+**What's going on here?** This connection was configured originally to contact the base URL, or `https://oic101.herokuapp.com`. When the connection is added to the integration, the relative resource URI is `callOic`. This means that when the integration reaches this component, OIC will make a POST call to `https://oic101.herokuapp.com/callOic`, which is precisely the URL to hit. Also, the payload/body sent along with the POST request is of the form `{ "message": "" }`, which is the format that the application recognizes (a single object called "message" of type string, as indicated by the empty double quotes). Even though the format has been defined, the actual payload has yet to be sent over. You will hard-code this string first, then modify the integration to dynamically accept any string based on a parameter.
 
 6. Configure the map called "Map to sendToApp".
 
-	1. Click on the map and select the pencil icon. For reference, the eyeball icon allows you to view the map, the pencil icon allows you to edit the map, and the menu/details opens a menu with more options.
+	1. Click on the map and select the **pencil icon**. For reference, the eyeball icon allows you to view the map, the pencil icon allows you to edit the map, and the menu/details opens a menu with more options.
 	<img src="images/OIC-3.13.png" width="100%" title="How to edit a map">
 
-	2. The map dialog opens, detailing all elements prior to this map on the left side and all inputs to the immediate next element on the right side. In this case, the immediate next element is the REST connection to the application, sendToApp, and it was defined to have a payload containing a single "message" object of type string. Click "\*message" (first image), click on the line that says "-- Drag and Drop or Type value here...", and enter a random value (second image), for instance "This is a message from OIC." This message must be different from the default value of the message stored on the application, which is "Hello world!!!". Click **Save** to save the map, then **Close**, and finally **Validate** and then **Close**.
+	2. The map dialog opens, detailing all elements prior to this map on the left side and all inputs to the immediate next element on the right side. In this case, the immediate next element is the REST connection to the application, **sendToApp**, and it was defined to have a payload containing a single "message" object of type string. Click "\*message" (first image), click on the line that says "-- Drag and Drop or Type value here...", and enter a random string (second image), for instance "This is a message from OIC." This message must be different from the default value of the message stored on the application, which is "Hello world!!!". Click **Save** to save the mapping, then **Close**, and finally **Validate** and then **Close** to save your changes to the map.
 	<img src="images/OIC-3.14.png" width="100%" title="Contents of a map">
 	<img src="images/OIC-3.15.png" width="100%" title="Hard-code the value of message">
 
@@ -192,11 +194,11 @@ At this point, the integration should be ready for activation. **Return to the I
 If a **pencil icon** appears in the place of a white switch, the integration is not ready for activation. Please check that you have completed all parts of section 3 before moving on. If a **lock icon** appears in the place of a white switch, this indicates that another session is in progress right now. This can happen if another user is currently editing your integration, or if you were moved out of edit mode by a page refresh or some navigation away from your integration other than clicking **close**. In this case, you must first unlock your integration by clicking the hamburger menu on the right side of the rectangle containing your integration, then select **unlock**. Then you will be able to activate your integration if the white switch appears.
 
 ### 4.1: Activate the integration
-1. Click the switch icon. This brings you to a dialog box. Uncheck "Contribute integration mappings..." and check "Enable tracing". Once it appears, also check "Include payload". Finally, click **Activate**. You should see a screen that looks like the second image when you have successfully activated the integration.
+1. Click the switch icon. This brings you to the activation dialog box. Uncheck "Contribute integration mappings..." and check "Enable tracing". Once it appears, also check "Include payload". Finally, click **Activate**. You should see a screen that looks like the second image when you have successfully activated the integration.
 <img src="images/OIC-4.02.png" width="100%" title="Activating integration">
 <img src="images/OIC-4.03.png" width="100%" title="Successful activation">
 
-**NOTE**: For development and testing environments, it is ok to include the payload for debugging purposes. However, to be best-practice complaint, you should not include the payload for production environments. Also, this payload will appear in the **activity stream** or **activity log** (see [Activity Log](#activity) under Miscellaneous important information within OIC).
+**NOTE**: For development and testing environments, it is ok to include the payload for debugging purposes. However, to be best-practice complaint, you should not include the payload for production environments. Also, this payload will appear in the **activity stream** or **activity log**<!-- (see [Activity Log](#activity) under Miscellaneous important information within OIC)-->.
 
 2. At the very top, a green banner with two links should appear. Navigate to the website that looks something like `https://oic-ne-sc-orasenatdoracledigital01.integration.ocp.oraclecloud.com/ic/api/integration/v1/flows/rest/OIC101_INTEGRATION/1.0/metadata`. You can do this by clicking the corresponding link in the green banner, or you can click a new **gear icon** that gives you equivalent links (first image). Both of these take you to the metadata page (second image).
 <img src="images/OIC-4.04.png" width="100%" title="Running the integration">
@@ -208,12 +210,12 @@ If a **pencil icon** appears in the place of a white switch, the integration is 
 <img src="images/OIC-4.06.png" width="100%" title="This is a picture from Github. Or is it...">
 
 ### 4.2: Track instances and view the application
-Now that the integration has run at least once, you can view the integration's progress in the **tracking** page.
+Now that the integration has run at least once, you can view the integration's running/completed instances in the **tracking** page.
 1. Navigate back to the integration dashboard. In the upper-left corner, select the **hamburger menu** to open the left sidebar menu, then click the **left chevron** next to "Designer" (first image). Click **Monitoring**, then **Tracking** (second image).
 <img src="images/OIC-4.07.png" width="100%" title="Integration dashboard">
 <img src="images/OIC-4.08.png" width="100%" title="Instance tracking">
 
-**NOTE**: You should see a successful instance relating to the most recent run of the integration, noted by a green check mark next to "completed" (as in the above image). If there was an error, you should see instead a red X next to "failed". Currently you are only viewing instances that were run from an hour ago; you can request as much as three days ago or a custom range. Also, if you suspect that another instance was run after you last loaded this page, you can click the refresh icon next to the UTC time stamp: NOT the refresh button for the whole page.
+**NOTE**: You should see a successful instance relating to the most recent run of the integration, noted by a green check mark next to "COMPLETED" (as in the above image). If there was an error, you should see instead a red X next to "FAILED". Currently you are only viewing instances that were run from an hour ago; you can request as much as three days ago or a custom time range. Also, if you suspect that another instance was run after you last loaded this page, you can click the refresh icon next to the UTC time stamp; refreshing the whole page will also do the job but it has the unintended side effect of sometimes bringing you back to the integration dashboard.
 
 2. Here, you can drill down into the instances that were most recently run. **Click** on "execute: undefined" to drill down into the instance. You should see a copy of the integration that shows the flow of the current selected instance of when the integration was triggered, outlined in green.
 <img src="images/OIC-4.09.png" width="100%" title="Integration flow for the current selected instance">
@@ -226,7 +228,7 @@ Now that the integration has run at least once, you can view the integration's p
 In **STEP 3**, part 6, you configured a map to send a hard-coded string to the Heroku application. In this step, you will change your integration to instead send a string based on a parameter.
 
 ### 5.1: Modify the integration
-Once again, don't forget to save every now and then.
+Once again, **don't forget to save** every now and then.
 1. First, deactivate your integration. You can do this by either clicking the hamburger menu on the right side of the rectangle containing your integration, then "Deactivate", or by clicking the switch (now green and with a check mark). Once you see a green banner at the top and that the switch has turned "off" (is now white), you will have deactivated your integration.
 <img src="images/OIC-5.01.png" width="100%" title="Deactivating your integration">
 
@@ -242,7 +244,7 @@ Once again, don't forget to save every now and then.
 5. Click **Next** and **Done**. A dialog box will pop up informing you that a change to this component will affect a map that depends on this component: select **Update**. The map in question is the map right after the trigger component. Select the **Map to sendToApp** to edit.
 <img src="images/OIC-5.05.png" width="100%" title="Edit the map again">
 
-**NOTE**: You will also notice that upon updating the trigger, the old variable you were tracking `execute` now contains a new object called `QueryParameters`. OIC cannot track variables that are not leaf nodes, i.e. have no children variables. You can confirm this by looking at which variable has a "dropdown menu" (not a leaf node) and which variables do not (is a leaf node). You will have to re-track a variable.
+**NOTE**: You will also notice that upon updating the trigger, an error will have popped up. This is due to that the old variable you were tracking `execute` now contains a new object called `QueryParameters`. OIC can only track variables that are leaf nodes, i.e. have no children variables. You can confirm this by looking at which variable has a "dropdown menu" listing its children variables (not a leaf node) and which variables do not (is a leaf node). Since "execute" used to be a leaf node, but by adding a parameter it became a non-leaf node, this integration is no longer tracking any variables, and you will have to re-track a variable.
 
 6. Right click the **\*message** row on the right and select **Delete Mapping** (first image). Once you are done, drag the `qmessage` variable from the left side to the `*message` variable on the right side (second image). Finally, click **Validate** and then **Close** in the upper right corner.
 <img src="images/OIC-5.06.png" width="100%" title="Delete the mapping">
@@ -273,10 +275,10 @@ Note that the last slash after "1.0" is optional. Once you have built your URL, 
 | URL                              | Message from OIC | Comments                 |
 |----------------------------------|------------------|--------------------------|
 | `.../1.0/`                       |                  | No string was sent over. |
-| `.../1.0/?qmessage="Hey!"`       | `"Hey!"`         |                          |
+| `.../1.0/?qmessage="Hey!"`       | `"Hey!"`         | The double quotes are not needed to indicate an exact string to send over. The delimiter for parameters is the ampersand `&`. |
 | `.../1.0/?qmessage=Hello again`  | `Hello again`    |                          |
 | `.../1.0?qmessage=Hi%20again`    | `Hi again`       |                          |
-| `.../1.0?qmessage=%97%98`        | `��`	          | Apparently %97 and %98 point to undefined encodings or unrecognized special characters. 97 and 98 are the decimal representations of 'a' and 'b', but in hexadecimal they are the characters 151 and 152, which should be 'ù' and 'ÿ'. |
+| `.../1.0?qmessage=%97%98`        | `��`	      | Apparently %97 and %98 point to undefined encodings or unrecognized special characters. |
 | `.../1.0?qmessage=Hello%20again` | `Hello again`    |                          |
 
 This concludes the workshop. You may keep the integration and connection if you wish. To download the source code for the Heroku application, please visit this link: https://github.com/OracleMichael/OIC101/blob/master/oic101.tar. You may then opt to deploy this code to your own Heroku app to further modify this application. Creating and maintaining a Heroku account is free, as long as no "add-ons" (e.g. Dynos, Metrics) are configured and you are the owner of no more than 5 applications.
@@ -294,8 +296,8 @@ Let's review what you've learned.
 Overall, you learned the **basics of navigating OIC**, how to **build integrations** on OIC, and how to **view runtime issues**.
 -->
 Here are a few links to other workshops/guides on OIC that teach you how to build more complex integrations:
-[Connecting Autonomous Transaction Processing (ATP) with OIC](https://github.com/OracleCPS/ATPworkshop)
-[Integrating OIC with SaaS applications](https://github.com/OracleCPS/oicsaasintegration) (start with lab 200 or 300)
+- [Connecting Autonomous Transaction Processing (ATP) with OIC](https://github.com/OracleCPS/ATPworkshop)
+- [Integrating OIC with SaaS applications](https://github.com/OracleCPS/oicsaasintegration) (start with lab 200 or 300)
 
 
 ## Miscellaneous important information within OIC
