@@ -278,8 +278,10 @@ Note that the last slash after "1.0" is optional. Once you have built your URL, 
 | `.../1.0/?qmessage="Hey!"`       | `"Hey!"`         | The double quotes are not needed to indicate an exact string to send over. The delimiter for parameters is the ampersand `&`. |
 | `.../1.0/?qmessage=Hello again`  | `Hello again`    |                          |
 | `.../1.0?qmessage=Hi%20again`    | `Hi again`       |                          |
-| `.../1.0?qmessage=%97%98`        | `��`	      | Apparently %97 and %98 point to undefined encodings or unrecognized special characters. |
+| `.../1.0?qmessage=%97%98`        | `��`             | Apparently %97 and %98 point to undefined encodings or unrecognized special characters. |
 | `.../1.0?qmessage=Hello%20again` | `Hello again`    |                          |
+
+<img src="images/OIC-5.10.png" width="100%" title="Improved tracking due to parameter">
 
 This concludes the workshop. You may keep the integration and connection if you wish. To download the source code for the Heroku application, please visit this link: https://github.com/OracleMichael/OIC101/blob/master/oic101.tar. You may then opt to deploy this code to your own Heroku app to further modify this application. Creating and maintaining a Heroku account is free, as long as no "add-ons" (e.g. Dynos, Metrics) are configured and you are the owner of no more than 5 applications.
 
